@@ -1,0 +1,24 @@
+{
+  "name": "slide-maker",
+  "version": "1.0.0",
+  "description": "Tool to generate HTML slide deck from markdown-like plain text file",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ludomydla/slide-maker.git"
+  },
+  "keywords": [
+    "html",
+    "slides",
+    "generator"
+  ],
+  "author": "Ludo Mydla",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ludomydla/slide-maker/issues"
+  },
+  "homepage": "https://github.com/ludomydla/slide-maker#readme"
+}
