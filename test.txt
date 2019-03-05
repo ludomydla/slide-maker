@@ -1,4 +1,31 @@
-Hello there
-How are you 💾
+---intro
+# JavaScript slidemaker
+### by John Doe
 ---
-asdasdasda dasd asd ada
+## Why?
+Can you imagine, that you will need to write down just few lines of text and by using some tool a whole presentation will be created to be viewed in browser?
+##### I want _that_
+---
+##This is it
+* It will take your pseudo-markdown text
++ Parse it and create an [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) page
+- Decorate that page with default [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS) (or your custom one)
+* Give it some basic functionality (moving through slides)
+* **Voila!** Presentation is __ready__
+---chapter
+##How was this done?
+---
+## For starters...
+* *a lot* of RegExs
+* some `code`
+---
+Then some more code like this
+    matrix.init();
+    let neo = matrix.createTheOne();
+    neo.learn("Kung fu");
+---chapter
+## Bring on some images
+![Image of Unix Penguin](imgs/tux.png)
+---end
+## Thanks for watching
+

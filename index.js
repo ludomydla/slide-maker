@@ -2,14 +2,17 @@ const FS = require("fs");
 
 let parser = {
   parseSlides: function(text) {
-    let regex = /\-\-\-/g;
+    let regex = /\-\-\-(\w*)/g;
     return ("<div class='screen'>" + text + "</div>").replace(
       regex,
       "</div><div class='screen'>"
     );
   },
 
-  parseHeadings: function(text) {}
+  parseHeadings: function(text) {
+    // find all types of headings h1-h6
+    let regex = /^\s*(#{1,6}[^#].*)$/gim;
+  }
 };
 
 function runParser(text, cbParser) {
