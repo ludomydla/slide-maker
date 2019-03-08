@@ -1,3 +1,5 @@
+Duude, thats trippy
+Maaan
 ---intro
 # JavaScript slidemaker
 ### by John Doe
@@ -10,6 +12,7 @@ Can you imagine, that you will need to write down just few lines of text and by 
 * It will take your pseudo-markdown text
 + Parse it and create an [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML) page
 - Decorate that page with default [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS) (or your custom one)
+
 * Give it some basic functionality (moving through slides)
 * **Voila!** Presentation is __ready__
 ---chapter
@@ -26,6 +29,7 @@ Then some more code like this
 ---chapter
 ## Bring on some images
 ![Image of Unix Penguin](imgs/tux.png)
+and emojisss 🐍🍧☃
 ---end
 ## Thanks for watching
-
+---whatever

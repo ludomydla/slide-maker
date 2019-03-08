@@ -36,8 +36,6 @@ let parser = {
   parseCodeBlock: function(text) {
     let regex = /^ {4}(.*)/gim;
     text = text.replace(regex, "<pre>$1</pre>");
-    let regexRemovePre = /<\/pre>(\r\n|\n)<pre>/gims;
-    text = text.replace(regexRemovePre, "$1");
     return text;
   },
 
@@ -51,11 +49,48 @@ let parser = {
     text = text.replace(regex, '<a href="$2">$1</a>');
     return text;
   },
+  parseListItems: function(text) {
+    let regexLi = /^(\d+.|\*|\+|-) (.*)$/gim;
+    let regexIsUl = /\*|\+|-/;
+    text = text.replace(regexLi, function(match, p1, p2) {
+      let wrapperTags = regexIsUl.test(p1)
+        ? ["<ul>", "</ul>"]
+        : ["<ol>", "</ol>"];
+      return `${wrapperTags[0]}<li>${p2}</li>${wrapperTags[1]}`;
+    });
+    return text;
+  },
+  parseOLsULs: function(text) {
+    let regexRemoveOL = /<\/ol>(\r\n|\n)<ol>/gims;
+    let regexRemoveUL = /<\/ul>(\r\n|\n)<ul>/gims;
+    text = text.replace(regexRemoveOL, "$1");
+    text = text.replace(regexRemoveUL, "$1");
+    return text;
+  },
+  parseParagraphs: function(text) {
+    let regex = /^(\w.*$)/gim;
+    text = text.replace(regex, "<p>$1</p>");
+    return text;
+  },
+  parsePre: function(text) {
+    let regexRemovePre = /<\/pre>(\r\n|\n)<pre>/gims;
+    text = text.replace(regexRemovePre, "$1");
+    return text;
+  },
+  parseSlides: function(text) {
+    let regex = /^---(.*)/gim;
+    text = text.replace(regex, '</div><div class="screen $1">');
+    return text;
+  },
+  cleanHtml: function(text) {
+    if (text.indexOf("</div>") == 0) {
+      text = text.substring(6);
+    } else {
+      text = '<div class="screen">\n' + text;
+    }
 
-  parseListItems: function(text) {},
-  parseULs: function(text) {},
-  parseOLs: function(text) {},
-  parseSlides: function(text) {}
+    return text + "</div>";
+  }
 };
 
 function runParser(text, cbParser) {
@@ -74,6 +109,12 @@ function runParser(text, cbParser) {
   content = runParser(content, parser.parseCodeBlock);
   content = runParser(content, parser.parseImages);
   content = runParser(content, parser.parseLinks);
+  content = runParser(content, parser.parseListItems);
+  content = runParser(content, parser.parseOLsULs);
+  content = runParser(content, parser.parseParagraphs);
+  content = runParser(content, parser.parsePre);
+  content = runParser(content, parser.parseSlides);
+  content = runParser(content, parser.cleanHtml);
 
-  console.log(content);
+  FS.writeFileSync("test.html", content, { encoding: "utf-8" });
 })();
