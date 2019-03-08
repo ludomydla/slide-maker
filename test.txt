@@ -16,8 +16,8 @@ Can you imagine, that you will need to write down just few lines of text and by 
 ##How was this done?
 ---
 ## For starters...
-* *a lot* of RegExs
-* some `code`
+1. *a lot* of RegExs
+2. some `code`
 ---
 Then some more code like this
     matrix.init();

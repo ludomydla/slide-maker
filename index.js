@@ -36,13 +36,22 @@ let parser = {
   parseCodeBlock: function(text) {
     let regex = /^ {4}(.*)/gim;
     text = text.replace(regex, "<pre>$1</pre>");
-    // let regexRemovePres = /<\/pre>(.)<pre>/gims;
-    // text = text.replace(regexRemovePres, "$1");
+    let regexRemovePre = /<\/pre>(\r\n|\n)<pre>/gims;
+    text = text.replace(regexRemovePre, "$1");
     return text;
   },
 
-  parseLinks: function(text) {},
-  parseImages: function(text) {},
+  parseImages: function(text) {
+    let regex = /!\[(.*?)\]\((.+?)\)/gi;
+    text = text.replace(regex, '<img href="$2" alt="$1">');
+    return text;
+  },
+  parseLinks: function(text) {
+    let regex = /\[(.+?)\]\((.+?)\)/gi;
+    text = text.replace(regex, '<a href="$2">$1</a>');
+    return text;
+  },
+
   parseListItems: function(text) {},
   parseULs: function(text) {},
   parseOLs: function(text) {},
@@ -63,6 +72,8 @@ function runParser(text, cbParser) {
   content = runParser(content, parser.parseHeadings);
   content = runParser(content, parser.parseCodeInline);
   content = runParser(content, parser.parseCodeBlock);
+  content = runParser(content, parser.parseImages);
+  content = runParser(content, parser.parseLinks);
 
   console.log(content);
 })();
