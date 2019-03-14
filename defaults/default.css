@@ -1,17 +1,23 @@
 :root {
-  font-size: 250%;
+  font-size: 200%;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   font-family: "Arial", sans-serif;
 }
+
 .screen {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   position: fixed;
-  text-align: center;
   display: none;
+  padding: 0.5rem 1rem;
+  line-height: 2rem;
 }
 
 .screen:first-of-type {
@@ -24,9 +30,9 @@ body {
   left: 50%;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 0 1.5rem;
-  line-height: 2rem;
-  height: 2rem;
+  padding: 0 0.5rem;
+  line-height: 1.5rem;
+  height: 1.5rem;
   background-color: rgba(255, 255, 255, 0.3);
   font-weight: bold;
   font-size: 0.75rem;
@@ -46,4 +52,13 @@ button:focus {
 
 #btnBck {
   transform: translateX(-100%);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-align: center;
 }
