@@ -2,7 +2,7 @@
   "name": "slide-maker",
   "version": "1.0.0",
   "description": "Tool to generate HTML slide deck from markdown-like plain text file",
-  "main": "index.js",
+  "main": "slideTool.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
