@@ -1,0 +1,49 @@
+:root {
+  font-size: 250%;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+}
+.screen {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: fixed;
+  text-align: center;
+  display: none;
+}
+
+.screen:first-of-type {
+  display: block;
+}
+
+.ctrls {
+  position: fixed;
+  bottom: 0.2rem;
+  left: 50%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0 1.5rem;
+  line-height: 2rem;
+  height: 2rem;
+  background-color: rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+  font-size: 0.75rem;
+  cursor: pointer;
+  opacity: 0.1;
+  transition: opacity 0.75s;
+  z-index: 100;
+}
+
+.ctrls:hover {
+  opacity: 1;
+}
+
+button:focus {
+  outline: 0;
+}
+
+#btnBck {
+  transform: translateX(-100%);
+}

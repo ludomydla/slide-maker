@@ -1,3 +1,5 @@
+const FS = require("fs");
+
 let parser = {
   parseItalics: function(text) {
     let regexUnderscore = /([^_])_([^_|^\s].*[^_|^\s])_([^_])/gim;
@@ -80,7 +82,7 @@ let parser = {
     text = text.replace(regex, '</div><div class="screen $1">');
     return text;
   },
-  cleanHtml: function(text) {
+  cleanSlides: function(text) {
     if (text.indexOf("</div>") == 0) {
       text = text.substring(6);
     } else {
@@ -88,151 +90,51 @@ let parser = {
     }
     return text + "</div>";
   },
-  makeHtml: function(text) {
-    return (
-      '<!DOCTYPE html><html><head><meta charset="utf-8">' +
-      styles +
-      "</head><body>" +
-      `<button class="ctrls" id="btnBck">&lt;</button>
-      <button class="ctrls" id="btnFwd">&gt;</button>` +
-      text +
-      scripts +
-      "</body></html>"
-    );
+  makeDefaultHtml: function(text) {
+    let htmlTemplate = FS.readFileSync("defaults/default.html", {
+      encoding: "utf-8"
+    });
+    return htmlTemplate.replace("<!--SLIDES-->", text);
+  },
+  makeDefaultCss: function(text) {
+    let cssTemplate = FS.readFileSync("defaults/default.css", {
+      encoding: "utf-8"
+    });
+    let regex = /<style>(.*)<\/style>/gi;
+    return text.replace(regex, "<style>" + cssTemplate + "</style>");
+  },
+  makeDefaultJs: function(text) {
+    let jsTemplate = FS.readFileSync("defaults/default.js", {
+      encoding: "utf-8"
+    });
+    let regex = /<script>(.*)<\/script>/gi;
+    return text.replace(regex, "<script>" + jsTemplate + "</script>");
   }
 };
 
-let styles = `
-<style>
-  body { font-family: "Arial", sans-serif; }
-  .screen {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    position: fixed;
-    text-align: center;
-    display: none;
-  }
-  
-  .screen:first-of-type {
-    display:block;
-  }
-
-  .ctrls {
-    position: fixed;
-    bottom: .2em;
-    left: 50%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 0 1.5em;
-    line-height: 2em;
-    height: 2em;
-    background-color: rgba(255,255,255, .3);
-    font-weight: bold;
-    font-size: .75em;
-    cursor: pointer;
-    opacity: 0.1;
-    transition: opacity .75s;
-    z-index: 100;
-  }
-  
-  .ctrls:hover {
-    opacity: 1;
-  }
-  
-  button:focus {outline:0;}
-  
-  #btnBck {
-    transform: translateX(-100%);
-  }
-</style>
-`;
-
-let scripts = `
-<script>
-const $ = function(selector) {
-  let result = document.querySelectorAll(selector);
-  if (result.length > 1) return result;
-  else if (result.length == 1) return result[0];
-  else return null;
-};
-
-const hide = function(el) {
-  el.style.display = "none";
-};
-
-const show = function(el) {
-  el.style.display = "block";
-};
-
-let actualSlide = $(".screen")[0];
-
-function goNext() {
-  let next = actualSlide.nextElementSibling;
-  if (
-    next &&
-    next.tagName === "DIV" &&
-    next.className.indexOf("screen") != -1
-  ) {
-    hide(actualSlide);
-    show(next);
-    actualSlide = next;
-  }
-}
-
-function goPrev() {
-  let prev = actualSlide.previousElementSibling;
-  if (
-    prev &&
-    prev.tagName === "DIV" &&
-    prev.className.indexOf("screen") != -1
-  ) {
-    hide(actualSlide);
-    show(prev);
-    actualSlide = prev;
-  }
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-  window.addEventListener("keydown", function(ev) {
-    switch (ev.which) {
-      case 37:
-      case 38:
-        goPrev();
-        break;
-      case 39:
-      case 40:
-        goNext();
-        break;
-    }
-  });
-
-  $("#btnBck").addEventListener("click", goPrev);
-
-  $("#btnFwd").addEventListener("click", goNext);
-});
-</script>
-`;
-
-function runParser(text, cbParser) {
-  return cbParser(text);
-}
+let parsersToRun = [
+  parser.parseItalics,
+  parser.parseBold,
+  parser.parseHeadings,
+  parser.parseCodeInline,
+  parser.parseCodeBlock,
+  parser.parseImages,
+  parser.parseLinks,
+  parser.parseListItems,
+  parser.parseOLsULs,
+  parser.parseParagraphs,
+  parser.parsePre,
+  parser.parseSlides,
+  parser.cleanSlides,
+  parser.makeDefaultHtml,
+  parser.makeDefaultCss,
+  parser.makeDefaultJs
+];
 
 function md2html(content) {
-  content = runParser(content, parser.parseItalics);
-  content = runParser(content, parser.parseBold);
-  content = runParser(content, parser.parseHeadings);
-  content = runParser(content, parser.parseCodeInline);
-  content = runParser(content, parser.parseCodeBlock);
-  content = runParser(content, parser.parseImages);
-  content = runParser(content, parser.parseLinks);
-  content = runParser(content, parser.parseListItems);
-  content = runParser(content, parser.parseOLsULs);
-  content = runParser(content, parser.parseParagraphs);
-  content = runParser(content, parser.parsePre);
-  content = runParser(content, parser.parseSlides);
-  content = runParser(content, parser.cleanHtml);
-  content = runParser(content, parser.makeHtml);
+  parsersToRun.forEach(parser => {
+    content = parser(content);
+  });
   return content;
 }
 
